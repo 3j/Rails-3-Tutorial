@@ -119,6 +119,7 @@ GEM
       libwebsocket (~> 0.1.3)
       multi_json (~> 1.0)
       rubyzip
+    spork (1.0.0rc3)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -147,5 +148,6 @@ DEPENDENCIES
   rails (= 3.2.6)
   rspec-rails (= 2.10.0)
   sass-rails (= 3.2.4)
+  spork (~> 1.0rc)
   sqlite3 (= 1.3.5)
   uglifier (= 1.2.3)
