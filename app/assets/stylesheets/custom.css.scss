@@ -1,5 +1,9 @@
 @import "bootstrap";
 
+/* mixins, variables, etc */
+
+$grayMediumLight = #eaeaea;
+
 /* universal */
 
 html {
@@ -20,10 +24,9 @@ textarea {
 
 .center {
   text-align: center;
-}
-
-.center h1 {
-  margin-bottom: 10px;
+  h1 {
+    margin-bottom: 10px;
+  }
 }
 
 
@@ -46,7 +49,7 @@ h2 {
   margin-bottom: 30px;
   text-align: center;
   font-weigth: normal;
-  color: #999;
+  color: $grayLight;
 }
 
 p {
@@ -61,17 +64,16 @@ p {
   float: left;
   margin-right: 10px;
   font-size: 1.7em;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
   font-weight: bold;
   line-height: 1;
-}
-
-#logo:hoover {
-  color: #fff;
-  text-decoration: none;
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
 }
 
 
@@ -80,28 +82,22 @@ p {
 footer {
   margin-top: 45px;
   padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  color: #999;
-}
-
-footer a {
-  color: #555;
-}
-
-footer a:hoover {
-  color: #222;
-}
-
-footer small {
-  float: left;
-}
-
-footer ul {
-  float: right;
-  list-style: none;
-}
-
-footer ul li {
-  float: left;
-  margin-left: 10px;
+  border-top: 1px solid $grayMediumLight;
+  color: $grayLight;
+  a {
+    color: $gray;
+    &:hover {
+      color: $grayDarker;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    li {
+      float: left;
+      margin-left: 10px;
+    }
+  }
 }
