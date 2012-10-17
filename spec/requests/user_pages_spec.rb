@@ -15,7 +15,6 @@ end
 describe "User Pages" do
   subject { page }
 
-
   describe "signup" do
     let(:submit) { "Create my account" }
     before { visit signup_path }
@@ -64,7 +63,10 @@ describe "User Pages" do
 
   describe "edit" do
     let(:user) { FactoryGirl.create :user }
-    before { visit edit_user_path user }
+    before do
+      sign_in user
+      visit edit_user_path user
+    end
 
     describe "page" do
       it { should have_selector 'h1', text: "Update your profile" }
