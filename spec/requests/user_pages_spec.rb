@@ -15,18 +15,16 @@ end
 describe "User Pages" do
   subject { page }
 
-  describe "signup page" do
-    before { visit signup_path }
-
-    it { should have_selector 'h1', text: 'Sign up' }
-    it { should have_selector 'title', text: "Sign up" }
-  end
 
   describe "signup" do
-    before { visit signup_path }
-    
     let(:submit) { "Create my account" }
+    before { visit signup_path }
 
+    describe "page" do
+      it { should have_selector 'h1', text: 'Sign up' }
+      it { should have_selector 'title', text: "Sign up" }
+    end
+    
     describe "with valid user information" do
       before do
         fill_in "Name", with: "Example User"
