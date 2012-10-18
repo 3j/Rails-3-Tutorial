@@ -15,6 +15,26 @@ end
 describe "User Pages" do
   subject { page }
 
+  describe "index" do
+    before do
+      sign_in FactoryGirl.create :user
+      FactoryGirl.create :user, name: "Bob", email: "bob@example.com"
+      FactoryGirl.create :user, name: "Ben", email: "ben@example.com"
+      visit users_path
+    end
+
+    describe "page" do
+      it { should have_selector 'title', text: 'All users' }
+      it { should have_selector 'h1', text: 'All users' }
+
+      it "should list each user" do
+        User.all.each do |user|
+          expect(page).to have_selector 'li>a', text: user.name
+        end
+      end
+    end
+  end
+  
   describe "signup" do
     let(:submit) { "Create my account" }
     before { visit signup_path }
