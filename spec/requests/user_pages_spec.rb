@@ -26,16 +26,47 @@ describe "User Pages" do
       it { should have_selector 'title', text: 'All users' }
       it { should have_selector 'h1', text: 'All users' }
 
-      describe "pagination" do
-        before(:all) { 30.times { FactoryGirl.create :user } }
-        after(:all) { User.delete_all }
-      
-        it { should have_selector 'div.pagination' }
+      describe "as a regular user" do
+        it { should_not have_link 'delete' }
+      end
 
-        it "should list each user" do
-          User.paginate(page: 1).each do |user|
-            expect(page).to have_selector 'li>a', text: user.name
-          end
+      describe "as an admin user" do
+        let(:admin) { FactoryGirl.create :admin }
+        before do
+          sign_in admin
+          visit users_path
+        end
+            
+        it "should have link 'delete' for other users" do
+          page.should have_link 'delete', href: user_path(User.first)
+        end
+
+        it "should not have link 'delete' for himself" do
+          page.should_not have_link 'delete', href: user_path(admin)
+        end
+        
+        it "should be able to delete another user" do
+          expect { click_link 'delete' }.to change(User, :count).by -1
+        end
+
+        describe "after deleting another user" do
+          before { click_link 'delete' }
+
+          it { should have_selector 'title', text: 'All users' }
+          it { should have_selector 'div.alert.alert-success' }
+        end
+      end
+    end
+    
+    describe "pagination" do
+      before(:all) { 30.times { FactoryGirl.create :user } }
+      after(:all) { User.delete_all }
+
+      it { should have_selector 'div.pagination' }
+
+      it "should list each user" do
+        User.paginate(page: 1).each do |user|
+          expect(page).to have_selector 'li>a', text: user.name
         end
       end
     end
