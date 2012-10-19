@@ -15,10 +15,19 @@ describe User do
   it { should respond_to :password }
   it { should respond_to :password_confirmation }
   it { should respond_to :remember_token }
+  it { should respond_to :admin }
   it { should respond_to :authenticate }
 
   it { should be_valid }
+  it { should_not be_admin }
   
+  describe "accessible attributes" do
+    it "should not allow mass assigment of admin attribute" do
+      expect { User.new admin: true }.
+        to raise_error ActiveModel::MassAssignmentSecurity::Error
+    end
+  end
+
   describe "when name is not present" do
     before { @user.name = " " }
     it { should_not be_valid }
