@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_filter :signed_in_user, only: [:index, :edit , :update]
   before_filter :correct_user, only: [:edit, :update]
   before_filter :admin_user, only: :destroy
+  before_filter :registered_user, only: [:new, :create]
 
   def index
     @users = User.paginate page: params[:page]
@@ -61,5 +62,9 @@ class UsersController < ApplicationController
 
     def admin_user
       redirect_to root_path unless current_user.admin?
+    end
+
+    def registered_user
+      redirect_to root_path, notice: "You are a registered user" unless not_signed_in?
     end
 end

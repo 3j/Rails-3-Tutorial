@@ -98,7 +98,7 @@ describe "Authentication" do
       end
     end
 
-    describe "as wrong user" do
+    describe "for wrong users" do
       let(:user) { FactoryGirl.create :user }
       before { sign_in user }
       let(:wrong_user) { FactoryGirl.create :user, email: "wrong@example.com" }
@@ -114,13 +114,38 @@ describe "Authentication" do
       end
     end
     
-    describe "as non-admin user" do
+    describe "for non-admin users" do
       let(:user) { FactoryGirl.create :user }
       let(:non_admin) { FactoryGirl.create :user }
       before { sign_in non_admin }
 
       describe "submitting a DELETE request to the User#destroy action" do
         before { delete user_path(user) }
+        specify { response.should redirect_to root_path }
+      end
+    end
+
+    describe "for registered users" do
+      let(:user) { FactoryGirl.create :user }
+      before { sign_in user }
+
+      describe "when attempting to visit the signup page" do
+        before { visit signup_path }
+
+        it "should render the root page" do
+          expect(page).to have_selector 'h1', text: 'Welcome to the Sample App'
+        end
+
+        it { should have_selector 'div.alert.alert-notice' }
+      end
+
+      describe "submitting a GET request to the User#new action" do
+        before { get signup_path }
+        specify { response.should redirect_to root_path }
+      end
+
+      describe "submitting a POST request to the User#create action" do
+        before { post users_path }
         specify { response.should redirect_to root_path }
       end
     end

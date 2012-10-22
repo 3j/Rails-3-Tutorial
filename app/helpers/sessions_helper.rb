@@ -5,13 +5,17 @@ module SessionsHelper
     self.current_user = user
   end
 
+  def sign_out
+    self.current_user = nil
+    cookies.delete :remember_token
+  end
+
   def signed_in?
     !current_user.nil?
   end
 
-  def sign_out
-    self.current_user = nil
-    cookies.delete :remember_token
+  def not_signed_in?
+    current_user.nil?
   end
 
   def current_user=(user)
