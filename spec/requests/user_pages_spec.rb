@@ -77,6 +77,21 @@ describe "User Pages" do
         it { should have_content user.microposts.count }
       end
     end
+
+    describe "pagination" do
+      before(:all) do
+        30.times { FactoryGirl.create :micropost, user: user, content: "Foo" }
+      end
+      after(:all) { user.delete }
+
+      it { should have_selector 'div.pagination' }
+
+      it "should list each micropost from current user" do
+        user.microposts.paginate(page: 1).each do |micropost|
+          expect(page).to have_selector 'span.content', text: micropost.content
+        end
+      end
+    end
   end
 
   describe "signup" do
