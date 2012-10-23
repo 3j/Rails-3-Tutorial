@@ -1,16 +1,5 @@
 require 'spec_helper'
 
-describe "Profile Pages" do
-  subject { page }
-
-  describe "profile page" do
-    let(:user) { FactoryGirl.create :user }
-    before { visit user_path user }
-
-    it { should have_selector 'h1', text: user.name }
-    it { should have_selector 'title', text: user.name }
-  end
-end
 
 describe "User Pages" do
   subject { page }
@@ -71,7 +60,25 @@ describe "User Pages" do
       end
     end
   end
-  
+
+  describe "profile" do
+    let(:user) { FactoryGirl.create :user }
+    let!(:micropost1) { FactoryGirl.create :micropost, user: user, content: "Foo" }
+    let!(:micropost2) { FactoryGirl.create :micropost, user: user, content: "Bar" }
+    before { visit user_path user }
+
+    describe "page" do
+      it { should have_selector 'h1', text: user.name }
+      it { should have_selector 'title', text: user.name }
+
+      describe "microposts" do
+        it { should have_content micropost1.content }
+        it { should have_content micropost2.content }
+        it { should have_content user.microposts.count }
+      end
+    end
+  end
+
   describe "signup" do
     let(:submit) { "Create my account" }
     before { visit signup_path }
@@ -80,7 +87,7 @@ describe "User Pages" do
       it { should have_selector 'h1', text: 'Sign up' }
       it { should have_selector 'title', text: "Sign up" }
     end
-    
+
     describe "with valid user information" do
       before do
         fill_in "Name", with: "Example User"
