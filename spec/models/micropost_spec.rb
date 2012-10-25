@@ -3,12 +3,9 @@ require 'spec_helper'
 describe Micropost do
 
   let(:user) { FactoryGirl.create :user }
+  let(:micropost) { user.microposts.build content: "Lorem ipsum" } 
 
-  before do
-    @micropost = user.microposts.build content: "Lorem ipsum"
-  end
-
-  subject { @micropost }
+  subject { micropost }
 
   it { should respond_to :content }
   it { should respond_to :user_id }
@@ -17,7 +14,7 @@ describe Micropost do
   it { should be_valid }
 
   it "should belong to the right user" do
-    expect(@micropost.user).to eq user
+    expect(micropost.user).to eq user
   end
 
   describe "accessible attributes" do
@@ -28,17 +25,17 @@ describe Micropost do
   end
   
   describe "when user_id is not present" do
-    before { @micropost.user_id = nil }
+    before { micropost.user_id = nil }
     it { should_not be_valid }
   end
 
   describe "with blank content" do
-    before { @micropost.content = '' }
+    before { micropost.content = '' }
     it { should_not be_valid }
   end
 
   describe "with too long content" do
-    before { @micropost.content = 'a' * 141 }
+    before { micropost.content = 'a' * 141 }
     it { should_not be_valid }
   end
 end
