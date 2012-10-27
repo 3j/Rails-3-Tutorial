@@ -18,7 +18,7 @@ describe User do
   it { should respond_to :admin }
   it { should respond_to :authenticate }
   it { should respond_to :microposts } 
-  it { should respond_to :proto_feed }
+  it { should respond_to :feed }
   it { should respond_to :relationships }
   it { should respond_to :followed_users }
   it { should respond_to :reverse_relationships }
@@ -168,10 +168,27 @@ describe User do
       let(:unfollowed_post) do
         FactoryGirl.create :micropost, user: FactoryGirl.create(:user)
       end
+      let(:followed_user) { FactoryGirl.create :user }
 
-      its(:proto_feed) { should include older_micropost }
-      its(:proto_feed) { should include newer_micropost }
-      its(:proto_feed) { should_not include unfollowed_post }
+      before do
+        user.follow! followed_user
+        3.times { followed_user.microposts.create! content: "Lorem ipsum" }
+      end
+
+      it "should include his own microposts" do
+        expect(user.feed).to include older_micropost
+        expect(user.feed).to include newer_micropost
+      end
+
+      it "should include the microposts from a followed user" do
+        followed_user.microposts.each do |micropost|
+          expect(user.feed).to include micropost
+        end
+      end
+
+      it "should not include microposts from non-followed users" do
+        expect(user.feed).not_to include unfollowed_post 
+      end
     end
   end
 

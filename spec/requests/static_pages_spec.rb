@@ -38,8 +38,8 @@ describe "Static pages" do
         visit root_path
       end
 
-      it "should render the user's proto-feed" do
-        user.proto_feed.each do |micropost|
+      it "should render the user's feed" do
+        user.feed.each do |micropost|
           page.should have_selector "li##{micropost.id}", text: micropost.content
         end
       end
